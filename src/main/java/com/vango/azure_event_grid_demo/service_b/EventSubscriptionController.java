@@ -2,6 +2,7 @@ package com.vango.azure_event_grid_demo.service_b;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/service-b/event")
-public class EventControllerB {
+@Profile("production")
+public class EventSubscriptionController {
 
   @Value("${service-b.subscription.token}")
   private String token;
@@ -19,7 +21,7 @@ public class EventControllerB {
   private final EventService eventService;
   private final SimpMessagingTemplate messageTemplate;
 
-  public EventControllerB(EventService eventService, SimpMessagingTemplate messageTemplate) {
+  public EventSubscriptionController(EventService eventService, SimpMessagingTemplate messageTemplate) {
     this.eventService = eventService;
     this.messageTemplate = messageTemplate;
   }

@@ -1,8 +1,16 @@
 <template>
   <div>
     <h1>Service A</h1>
-    <textarea v-model="message" rows="40" cols="100" />
-    <button @click="sendMessage">Send</button>
+    <div>
+      <div>
+        <textarea
+          v-model="message"
+          rows="40"
+          placeholder="Input a message you would like to publish..."
+        />
+      </div>
+      <button @click="sendMessage">Send</button>
+    </div>
   </div>
 </template>
 <script>
@@ -21,3 +29,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+textarea {
+  width: 100%;
+}
+
+button {
+  float: right;
+}
+</style>

@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>Service B</h1>
-    <div>
+    <span v-if="!connected">establishing websocket connection...</span>
+    <div v-else>
+      <span v-if="messages.length === 0">Use Service A to send a message and it will appear here.</span>
       <section v-for="m in messages" :key="m.id">
         <summary
           >{{ m.subject }}:{{ m.eventType }}:{{ m.id }}:v{{ m.dataVersion }}:{{
@@ -22,6 +24,7 @@ export default {
   data: () => ({
     socket: null,
     stompClient: null,
+    connected: false,
     messages: []
   }),
   created () {

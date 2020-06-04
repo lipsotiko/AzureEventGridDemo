@@ -1,7 +1,13 @@
+spring:
+  profiles: production
 service-a:
   topic:
     endpoint: https://vangos-topic.eastus-1.eventgrid.azure.net/api/events?api-version=2018-01-01
-    access-key: Ild3Vnqny7NO/gdXj2NT6s60ppAYNzmAUcWQdXRZ8xM=
+    access-key: ${SERVICE_A_TOPIC_ACCESS_KEY}
 service-b:
   subscription:
-    token: CorrectHorseBatteryStaple
+    token: ${SERVICE_B_SUBSCRIPTION_TOKEN}
+---
+
+spring:
+  profiles: development
