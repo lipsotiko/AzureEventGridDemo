@@ -18,4 +18,5 @@ public class AzureEvent {
   Boolean isSubscriptionValidationEvent() {
     return "Microsoft.EventGrid.SubscriptionValidationEvent".equals(eventType);
   }
+
 }

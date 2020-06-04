@@ -3,6 +3,7 @@ package com.vango.azure_event_grid_demo.service_b;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,19 +17,24 @@ public class EventControllerB {
   private String token;
 
   private final EventService eventService;
+  private final SimpMessagingTemplate messageTemplate;
 
-  public EventControllerB(EventService eventService) {
+  public EventControllerB(EventService eventService, SimpMessagingTemplate messageTemplate) {
     this.eventService = eventService;
+    this.messageTemplate = messageTemplate;
   }
 
   @PostMapping("/listener")
   public ResponseEntity<ValidationResponse> eventListener(@RequestBody List<AzureEvent> azureEvents, @RequestParam String token) {
+    // Validate requests from Azure...otherwise, random people can mess with us.
     if (!this.token.equals(token)) return ResponseEntity.badRequest().build();
+
+    // Make sure Azure knows we want this to happen
     ValidationResponse validationResponse = validationHandshake(azureEvents);
     if (validationResponse != null) return ResponseEntity.ok(validationResponse);
 
-    // TODO: Do something with the event...
-    System.out.println(azureEvents.get(0).getData());
+    // Send events to the UI; or save them to a db...
+    azureEvents.forEach(e -> messageTemplate.convertAndSend("/topic/messages", e));
 
     return ResponseEntity.ok().build();
   }
@@ -43,19 +49,4 @@ public class EventControllerB {
     return null;
   }
 
-//  private void validationHandshake(List<com.vango.azure_event_grid_demo.AzureEvent> azureEvents) {
-//    List<com.vango.azure_event_grid_demo.AzureEvent> validationEvents =
-//      azureEvents.stream().filter(e -> e.getEventType().equals("Microsoft.EventGrid.SubscriptionValidationEvent")).collect(Collectors.toList());
-//    if (validationEvents.size() > 0) {
-//      log.info("Validation handshake was received from Azure");
-//      String validationUrl = validationEvents.get(0).getData().getValidationUrl();
-//      try {
-//        HttpURLConnection con = (HttpURLConnection) new URL(validationUrl).openConnection();
-//        con.getInputStream();
-//        log.info("Manual validation request response {}", new String(IOUtils.toByteArray(con.getInputStream())));
-//      } catch (IOException e) {
-//        e.printStackTrace();
-//      }
-//    }
-//  }
 }

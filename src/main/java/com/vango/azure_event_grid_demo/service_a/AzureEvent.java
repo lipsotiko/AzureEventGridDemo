@@ -11,17 +11,19 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AzureEvent {
-  String id;
-  String subject;
-  String eventType;
-  String eventTime;
-  String dataVersion;
+  private String id;
+  private String subject;
+  private String eventType;
+  private String eventTime;
+  private String dataVersion;
+  private Object data;
 
-  public AzureEvent(String subject, String eventType, String dataVersion) {
+  public AzureEvent(String eventType, String dataVersion, Object data) {
     this.id = UUID.randomUUID().toString();
-    this.subject = subject;
-    this.eventType = eventType;
-    this.dataVersion = dataVersion;
+    this.subject = "AzureEventGridDemo";
     this.eventTime = LocalDateTime.now().toString();
+    this.dataVersion = dataVersion;
+    this.eventType = eventType;
+    this.data = data;
   }
 }

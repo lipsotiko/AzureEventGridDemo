@@ -1,6 +1,7 @@
 package com.vango.azure_event_grid_demo.service_b;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vango.azure_event_grid_demo.service_b.event.SubscriptionValidation;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -15,18 +16,14 @@ public class EventService {
   }
 
   ValidationResponse getValidationResponse(AzureEvent azureEvent) {
-    if (azureEvent.isSubscriptionValidationEvent()) {
-      ValidationPayload validationPayload = null;
-      try {
-        byte[] bytes = mapper.writeValueAsBytes(azureEvent.getData());
-        validationPayload = mapper.readValue(bytes, ValidationPayload.class);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      return new ValidationResponse(validationPayload.getValidationCode());
+    SubscriptionValidation subscriptionValidation = null;
+    try {
+      byte[] bytes = mapper.writeValueAsBytes(azureEvent.getData());
+      subscriptionValidation = mapper.readValue(bytes, SubscriptionValidation.class);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-
-    return null;
+    return new ValidationResponse(subscriptionValidation.getValidationCode());
   }
 
 }
