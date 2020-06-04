@@ -1,0 +1,7 @@
+service-a:
+  topic:
+    endpoint: https://vangos-topic.eastus-1.eventgrid.azure.net/api/events?api-version=2018-01-01
+    access-key: Ild3Vnqny7NO/gdXj2NT6s60ppAYNzmAUcWQdXRZ8xM=
+service-b:
+  subscription:
+    token: CorrectHorseBatteryStaple
