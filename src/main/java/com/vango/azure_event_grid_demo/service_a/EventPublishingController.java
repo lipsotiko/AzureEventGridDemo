@@ -26,4 +26,9 @@ public class EventPublishingController {
     eventPublishingService.publish(Collections.singletonList(event));
   }
 
+  @PostMapping("/webprotege")
+  public void webprotege(@RequestBody String payload) {
+    System.out.println(payload);
+  }
+
 }
